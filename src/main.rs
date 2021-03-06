@@ -3,7 +3,8 @@ use std::fs::{File};
 use std::io::{BufRead, BufReader, Write};
 
 fn main() {
-    let mut quote_dict = HashMap::new();
+    // Save file into a String
+    let mut quote_dict = HashMap::new(); // All the information is stored in this variable
     let filename = "My Clippings.txt";
     let file = File::open(filename).unwrap();
     let reader = BufReader::new(file);
@@ -23,6 +24,7 @@ fn main() {
         }
     }
 
+    // Generate quotes
     for q in quote_container {
         let (book, date, quote) = (q[0].clone(), q[1].clone(), q[3].clone());
 
@@ -38,4 +40,13 @@ fn main() {
 
     let mut f = File::create("./quotes.json").expect("Unable to create file");
     f.write_all(j.as_bytes()).expect("Unable to write data");
+
+    // Find book names and write them into a file
+    let mut book_titles = Vec::new();
+    for (key, value) in quote_dict {
+        book_titles.push(key);
+    }
+
+    let mut book_file = File::create("./books.txt").expect("Unable to create file");
+    writeln!(book_file, "{}", book_titles.join("\n"));
 }
